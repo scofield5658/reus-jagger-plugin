@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const qs = require('qs');
 const url = require('url');
-const getUtils = require('./helpers/utils');
+const getUtils = require('../helpers/utils');
 
-module.exports = function(config, workdir) {
+module.exports = function(workdir, config) {
   const { abs2rel, srcUrl, tgtURL, isEmptyObject, hashfile, writefile, absdest } = getUtils(config, workdir);
   const rels = function(filepath, sregs) {
     const rels = [];
@@ -62,7 +62,7 @@ module.exports = function(config, workdir) {
             asset.externals.encode($1) : $1);
 
           const relpath = (function(abspath) {
-            if (config.env !== 'production' || !config.assets.test(abspath)) {
+            if ((!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') || !config.assets.test(abspath)) {
               return abs2rel(abspath);
             }
 

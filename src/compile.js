@@ -5,21 +5,28 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const log = require('fancy-log');
-const handleAsset = require('./asset');
+const handleAsset = require('./loaders/asset');
+const handleManiest = require('./loaders/manifest');
 const handleLoader = require('./loader');
 const getUtils = require('./helpers/utils');
 
-module.exports = function(config, workdir, manifest) {
+module.exports = function(workdir, config) {
   const { rel2abs, abs2rel, absdest, abstmp, calcMD5, writefile } = getUtils(config, workdir);
-  const asset = handleAsset(config, workdir);
-  const loader = handleLoader(config, workdir);
-  return async function(gulp, params) {
-    const routes = manifest.pages.routes();
-    const destManifest = require('../dist/loaders/manifest');
+  const asset = handleAsset(workdir, config);
+  const loader = handleLoader(workdir, config);
+  const manifest = path.join(workdir, 'dist', 'manifest.json');
+  const destManifest = handleManiest(workdir, config);
 
-    const ssrRoutes = (() => {
+  return async function(gulp) {
+    const routes = manifest.pages.routes();
+    const ssrRoutes = (function() {
+      const appConfig = require(path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'app.config'));
+      const routes = config.baseUrl ? appConfig.originRouters : appConfig.routers;
+      if (routes === undefined) {
+        throw 'routers or originRouters not found in app.config.js';
+      }
+
       const ssrRoutes = {};
-      const routes = require('../dist/routers/origin');
       for (const route of routes) {
         let payload = {};
         if (typeof route.preload === 'function') {

@@ -1,7 +1,7 @@
-const getUtils = require('./helpers/utils');
-const config = require('./configs/loader');
+const getUtils = require('../helpers/utils');
+const loaderConfigs = require('../configs/loader');
 
-const loaders = config.loaders
+const loaders = loaderConfigs.loaders
   .map(function(loader) {
     return Object.assign({}, loader, { loader: require(`../${loader.loader}`) });
   })
@@ -11,7 +11,7 @@ const loaders = config.loaders
   }, {});
 
 module.exports = function(workdir, config) {
-  const { getExtname, abssrc } = getUtils(config, workdir);
+  const {getExtname, abssrc} = getUtils(config, workdir);
   return {
     test({pathname}) {
       const extname = getExtname(pathname);
@@ -38,4 +38,3 @@ module.exports = function(workdir, config) {
     }
   };
 };
-

@@ -84,13 +84,13 @@ module.exports = function(config, workdir) {
     },
 
     tgtURL: (url) => {
-      const tgtBase = config.env == 'production' ?
+      const tgtBase = (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev') ?
         config.cdnUrl : config.baseUrl;
       return (`${tgtBase}${url.replace(/\\/gmi, '/').replace(/^\/pages/, '')}`).replace(/\\/gmi, '/');
     },
 
     srcUrl: (url) => {
-      const tgtBase = config.env == 'production' ?
+      const tgtBase = (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev') ?
         config.cdnUrl : config.baseUrl;
       return (url.replace(new RegExp(`^${tgtBase}`), '/pages')).replace(/\\/gmi, '/');
     },
