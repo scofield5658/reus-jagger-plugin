@@ -34,7 +34,7 @@ module.exports = function(config) {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: `"${config.env}"`,
+          NODE_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
           TEST_ENV: `"${config.test}"`,
           BASE_URL: `"${config.baseUrl}"`,
           CDN_URL: `"${config.cdnUrl}"`,

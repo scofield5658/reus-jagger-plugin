@@ -25,13 +25,12 @@ module.exports = function(workdir, config) {
       const extname = getExtname(pathname);
       const {type, loader} = loaders[extname];
 
-      const res = await loader({
+      const res = await loader(workdir, config)({
         filepath: abssrc(pathname),
         referer,
         target,
         extract,
-        library
-        //externals: asset.externals.all(referer)
+        library,
       });
 
       return Object.assign({}, res, { type });

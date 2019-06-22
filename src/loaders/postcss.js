@@ -9,7 +9,7 @@ module.exports = function(workdir, config) {
         return reject('file not exists');
       }
 
-      const {extract} = await webpack({
+      const { extract } = await webpack({
         filepath,
         extract: {
           ext: 'css'

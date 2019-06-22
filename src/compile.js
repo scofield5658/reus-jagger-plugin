@@ -7,23 +7,23 @@ const path = require('path');
 const log = require('fancy-log');
 const handleAsset = require('./loaders/asset');
 const handleManiest = require('./loaders/manifest');
-const handleLoader = require('./loader');
+const handleLoader = require('./loaders/loader');
 const getUtils = require('./helpers/utils');
 
 module.exports = function(workdir, config) {
   const { rel2abs, abs2rel, absdest, abstmp, calcMD5, writefile } = getUtils(config, workdir);
   const asset = handleAsset(workdir, config);
   const loader = handleLoader(workdir, config);
-  const manifest = path.join(workdir, 'dist', 'manifest.json');
+  const manifest = handleManiest(workdir, config, true);
   const destManifest = handleManiest(workdir, config);
 
   return async function(gulp) {
     const routes = manifest.pages.routes();
     const ssrRoutes = (function() {
       const appConfig = require(path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'app.config'));
-      const routes = config.baseUrl ? appConfig.originRouters : appConfig.routers;
+      const routes = appConfig.routers;
       if (routes === undefined) {
-        throw 'routers or originRouters not found in app.config.js';
+        throw 'routers not found in app.config.js';
       }
 
       const ssrRoutes = {};

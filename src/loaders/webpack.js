@@ -13,10 +13,8 @@ module.exports = function(workdir, config) {
   const asset = handleAsset(workdir, config);
   const manifest = handleManifest(workdir, config);
   const { abs2rel, abstmp, srcUrl, cpfile, isEmptyObject, radom } = getUtils(config, workdir);
-  return async function({ filepath, referer, target = 'web', extract, library }) {
+  return function({ filepath, referer, target = 'web', extract, library }) {
     return new Promise(function(resolve, reject) {
-
-      //const extname = path.extname(filepath);
       const tmppath = abstmp(abs2rel(filepath));
 
       const tgtConfig = Object.assign({}, webpackConfig, {

@@ -1,6 +1,6 @@
 {
   "name": "reus-jagger-plugin",
-  "version": "0.0.5",
+  "version": "0.3.0",
   "license": "MIT",
   "author": "guozhi <zhi.guo@geekthings.com.cn>",
   "scripts": {
@@ -42,12 +42,12 @@
     "url": "^0.11.0",
     "url-loader": "^1.1.2",
     "vue": "^2.6.10",
-    "vue-loader": "^14.2.2",
+    "vue-loader": "^13.6.1",
     "vue-server-renderer": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^3.12.0"
   },
   "peerDependencies": {
-    "reus.js": "^1.0.0"
+    "reus.js": "^1.0.6"
   }
 }

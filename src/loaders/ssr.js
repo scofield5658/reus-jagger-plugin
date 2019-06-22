@@ -1,11 +1,13 @@
+const path = require('path');
 const handleWebpack = require('./webpack');
+const getUtils = require('../helpers/utils');
 
 module.exports = function(workdir, config) {
-  const { abssrc, abstmp, absdest, writefile, radom } = getUtils(config, workdir);
+  const { abssrc, abstmp, absdest, writefile, radom, tgtRoute } = getUtils(config, workdir);
   const appConfig = require(path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'app.config'));
-  const routes = config.baseUrl ? appConfig.originRouters : appConfig.routers;
+  const routes = appConfig.routers.map(v => Object.assign({}, v, { path: tgtRoute(v.path)}));
   if (routes === undefined) {
-    throw 'routers or originRouters not found in app.config.js';
+    throw 'routers not found in app.config.js';
   }
 
   const webpack = handleWebpack(workdir, config);

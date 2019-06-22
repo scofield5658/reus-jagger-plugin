@@ -1,3 +1,4 @@
+const path = require('path');
 const swig = require('swig');
 const url = require('url');
 const minify = require('html-minifier');
@@ -10,7 +11,7 @@ const getUtils = require('./helpers/utils');
 module.exports = function(workdir, config) {
   const {srcRoute, srcUrl, writefile, abssrc, abstmp, absdest, abs2rel, tgtURL} = getUtils(config, workdir);
   const appConfig = require(path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'app.config'));
-  const routes = appConfig.routers;
+  const routes = appConfig.routers.map(v => Object.assign({}, v, { path: tgtURL(v.path) }));
   if (routes === undefined) {
     throw 'routers not found in app.config.js';
   }
@@ -21,7 +22,7 @@ module.exports = function(workdir, config) {
   const ssr = handleSsr(workdir, config);
 
   swig.setDefaults({
-    cache: (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev')
+    cache: Boolean(process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev') ? 'memory' : false,
   });
 
   const getRoute = (route) => {

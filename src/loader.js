@@ -1,41 +1,42 @@
+const url = require('url');
+const fs = require('fs');
 const getUtils = require('./helpers/utils');
-const config = require('./configs/loader');
-
-const loaders = config.loaders
-  .map(function(loader) {
-    return Object.assign({}, loader, { loader: require(`../${loader.loader}`) });
-  })
-  .reduce(function(loaders, loader) {
-    loaders[loader.fromext] = loader;
-    return loaders;
-  }, {});
+const handleLoader = require('./loaders/loader');
+const handleAsset = require('./loaders/asset');
 
 module.exports = function(workdir, config) {
-  const { getExtname, abssrc } = getUtils(config, workdir);
-  return {
-    test({pathname}) {
-      const extname = getExtname(pathname);
-      if (!extname) {
-        return false;
-      }
-
-      return !!loaders[extname];
-    },
-    compile: async function({pathname, target, referer, extract, library}) {
-      const extname = getExtname(pathname);
-      const {type, loader} = loaders[extname];
-
-      const res = await loader({
-        filepath: abssrc(pathname),
-        referer,
-        target,
-        extract,
-        library
-        //externals: asset.externals.all(referer)
-      });
-
-      return Object.assign({}, res, { type });
+  const { srcUrl, srcRoute, abstmp } = getUtils(config, workdir);
+  const loader = handleLoader(workdir, config);
+  const asset = handleAsset(workdir, config);
+  return async function(ctx, next) {
+    if (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev') {
+      return next();
     }
-  };
+
+    const queries = ctx.query || {};
+
+    if (queries['__compile'] === 'false') {
+      return next();
+    }
+
+    if (queries['__temporary'] === 'true') {
+      const tmpname = abstmp(srcUrl(url.parse(ctx.req.url).pathname));
+      ctx.body = fs.readFileSync(tmpname, 'utf-8');
+      return;
+    }
+
+    const pathname = srcUrl(url.parse(ctx.req.url).pathname);
+
+    if (!loader.test({pathname})) {
+      return next();
+    }
+
+    const {__library: library = ''} = asset.link.parse(ctx.req.url);
+    const referer = srcRoute(url.parse((ctx.req.headers['referer'] || '')).pathname) || '*';
+    const {type, content} = await loader.compile({pathname, referer, library});
+
+    ctx.type = type;
+    ctx.body = content;
+  }
 };
 

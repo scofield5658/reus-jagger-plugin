@@ -3,30 +3,36 @@ const fs = require('fs');
 const handleAsset = require('./asset');
 const getUtils = require('../helpers/utils');
 
-module.exports = function(workdir, config) {
+const getSourceDir = function(forceSrc = false) {
+  if (forceSrc) {
+    return 'src';
+  }
+  return !process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev' ? 'src' : 'dist';
+}
+
+module.exports = function(workdir, config, useSourceForce = false) {
   const { isEmpty } = getUtils(config, workdir);
   const asset = handleAsset(workdir, config);
-  const appConfig = require(path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'app.config'));
-  const routes = config.baseUrl ? appConfig.originRouters : appConfig.routers;
+  const appConfig = require(path.join(workdir, getSourceDir(useSourceForce), 'app.config'));
+  const routes = appConfig.routers;
   if (routes === undefined) {
-    throw 'routers or originRouters not found in app.config.js';
+    throw 'routers not found in app.config.js';
   }
-  const filepath = path.join(workdir, (!process.env.REUS_PROJECT_ENV || process.env.REUS_PROJECT_ENV === 'dev') ? 'src' : 'dist', 'manifest.json');
+  const filepath = path.join(workdir, getSourceDir(useSourceForce), 'manifest.json');
   const manifest = (function() {
-    const manifest = JSON.parse(fs.readFileSync(filepath));
-    const maps = routes.reduce(function(maps, route) {
+    const manifest = require(filepath);
+    const maps = {};
+    routes.forEach(function(route) {
       maps[route.path] = route;
-      return maps;
-    }, {});
+    });
+
     const pages = manifest.pages || {};
     for (const page in pages) {
       if (!maps[page]) {
         delete pages[page];
       }
     }
-
     fs.writeFileSync(filepath, JSON.stringify(manifest, null, 2));
-
     return manifest;
   })();
 
