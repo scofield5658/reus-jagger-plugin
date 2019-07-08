@@ -5,5 +5,4 @@ module.exports = {
     require('./src/loader'),
     require('./src/serve'),
   ],
-  render: require('./src/render'),
 };
