@@ -61,7 +61,7 @@ module.exports = function(workdir, config) {
             const abspath = rel2abs(pathname);
             // build extra css link files
             if (ext == 'css') {
-              const tmppath = abstmp(abspath);
+              const tmppath = abstmp(pathname);
               writefile(tmppath, asset.css.link(abspath));
               entryfiles.push({
                 entry: tmppath
