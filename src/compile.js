@@ -52,7 +52,6 @@ module.exports = function(workdir, config) {
       for (const chunk in chunks) {
         const files = chunks[chunk] || [];
 
-        // compile
         const entryfiles = [];
         for (const file of files) {
           const {__compile: compile, __library: library} = asset.link.parse(file);
@@ -153,20 +152,6 @@ module.exports = function(workdir, config) {
 
           for (const chunk of chunks) {
             await task([chunk], absdest(abs2rel(chunk)));
-
-          // cp to dest relative path
-          // to fixed ssr load js package problem
-          /*
-            console.log('>>>>>>entry:');
-            console.log(chunk);
-            console.log(absdest(abs2rel(entry)));
-            console.log(absdest(abs2rel(chunk)));
-            cpfile({
-              from: chunk,
-              to: path.join(absdest(abs2rel(path.dirname(entry))), tgtURL(abs2rel(chunk)))
-            });
-            */
-
           }
         }
       }
