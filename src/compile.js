@@ -90,7 +90,7 @@ module.exports = function(workdir, config) {
 
               extractfiles.push(extract);
 
-              return await loader.compile({
+              return loader.compile({
                 pathname,
                 referer: route,
                 extract: {
@@ -99,7 +99,7 @@ module.exports = function(workdir, config) {
                 library
               });
             } else {
-              return await loader.compile({
+              return loader.compile({
                 pathname,
                 referer: route,
                 library

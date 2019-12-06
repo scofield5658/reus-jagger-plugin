@@ -72,7 +72,6 @@ module.exports = function(workdir, config) {
         const {ext} = extract;
         const plugins = tgtConfig.plugins || (tgtConfig.plugins = []);
         extfile = tmppath.replace(/\.\w+$/, `.${radom()}.${ext}`);
-        //const extfile = `${path.dirname(tmppath)}/${ext}_${+new Date}_${radom(0, Number.MAX_VALUE)}.${ext}`
 
         plugins.push(
           new ExtractTextPlugin(path.basename(extfile))

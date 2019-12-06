@@ -6,17 +6,14 @@ module.exports = function(config) {
     module: {
       loaders: [
         {
-          test: /\.js$/i,
+          test: /(\.jsx|\.js)$/i,
           loader: 'babel-loader',
-          exclude: /node_modules/,
-          options: {
-            presets: ['env']
-          }
+          exclude: /node_modules/i,
         },
         {
           test: /\.vue$/i,
-          exclude: /node_modules/i,
           loader: 'vue-loader',
+          exclude: /node_modules/i,
           options: {
             extractCSS: (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev')
           }
@@ -46,20 +43,12 @@ module.exports = function(config) {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
-          TEST_ENV: `"${config.test}"`,
           BASE_URL: `"${config.baseUrl}"`,
           CDN_URL: `"${config.cdnUrl}"`,
           TARGET: '"client"'
         }
       }),
-      //new ExtractTextPlugin("styles.css"),
-      /*
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        }
-      })
-      */
+      new ExtractTextPlugin("styles.css"),
     ],
     devtool: 'inline-source-map'
   };
