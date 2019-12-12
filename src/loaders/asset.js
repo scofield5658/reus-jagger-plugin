@@ -83,32 +83,8 @@ module.exports = function(workdir, config) {
 
   const asset = {
     html: {
-      rels(filepath) {
-        return rels(filepath, [
-          '{%\\s*extends\\s*[\'"](\\S+)[\'"]\\s*%}',
-          '{%\\s*include\\s*[\'"](\\S+)[\'"]\\s*%}'
-        ]);
-      },
-      link(filepath) {
-
-        return link(filepath, [
-          {
-            match: '<(\\w+)[^>]+src[^>]+>',  // equal /<(\w+)[^>]+src[^>]+>/
-            from: 'src=[\'"]?([^\'"]+)[\'"]?', // equal /src=['"]?([^'"]+)['"]?/
-            to: 'src="$TO"'
-          },
-          {
-            match: '<(link)[^>]+href[^>]+>',  // equal /<(\w+)[^>]+href[^>]+>/
-            from: 'href=[\'"]?([^\'"]+)[\'"]?',  // equal /href=['"]?([^'"]+)['"]?/
-            to: 'href="$TO"'
-          },
-          {
-            match: '<(\\w+)[^>]+url[^>]+>',  // equla /<(\w+)[^>]+url[^>]+>/
-            from: 'url\\([\'"]?([^\'")]+)[\'"]?\\)',  // equla /url\(['"]?([^'")]+)['"]?\)/gmi
-            to: 'url($TO)'
-          }
-        ]);
-      }
+      rels,
+      link,
     },
     css: {
       rels(filepath) {
@@ -124,33 +100,6 @@ module.exports = function(workdir, config) {
             to: 'url($TO)'
           }
         ]);
-      }
-    },
-    tags: {
-      parse(tagname, content) {
-        const tags = [];
-        const reg = new RegExp(`<${tagname} ([^>]+)></${tagname}>`, 'gmi');
-
-        {
-          let exec = reg.exec(content);
-          while (exec) {
-            const props = {};
-            const kvs = exec[1].split(/\s+/);
-            for (const kv of kvs) {
-              const matches = kv.match(/(\w+)=['"]+(\S+)['"]+/);
-              if (matches) {
-                const key = matches[1].toLowerCase();
-                const val = matches[2];
-
-                props[`__${key}`] = val;
-              }
-            }
-            tags.push(props);
-            exec = reg.exec(content);
-          }
-        }
-
-        return tags;
       }
     },
     link: {

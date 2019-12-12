@@ -10,9 +10,9 @@ const handleManiest = require('./loaders/manifest');
 const handleLoader = require('./loaders/loader');
 const getUtils = require('./helpers/utils');
 
-module.exports = function(workdir, config) {
+module.exports = function(workdir, config, mixins) {
   const { rel2abs, abs2rel, absdest, abstmp, calcMD5, writefile } = getUtils(config, workdir);
-  const asset = handleAsset(workdir, config);
+  const asset = Object.assign(handleAsset(workdir, config), mixins.asset(workdir, config));
   const loader = handleLoader(workdir, config);
   const manifest = handleManiest(workdir, config, true);
   const destManifest = handleManiest(workdir, config);

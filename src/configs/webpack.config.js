@@ -48,7 +48,7 @@ module.exports = function(config) {
           TARGET: '"client"'
         }
       }),
-      new ExtractTextPlugin("styles.css"),
+      // new ExtractTextPlugin("styles.css"),
     ],
     devtool: 'inline-source-map'
   };
