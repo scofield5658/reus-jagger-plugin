@@ -123,6 +123,32 @@ module.exports = function(workdir, config) {
         return qs.parse(url.parse(pathname).query);
       }
     },
+    tags: {
+      parse(tagname, content) {
+        const tags = [];
+        const reg = new RegExp(`<${tagname} ([^>]+)></${tagname}>`, 'gmi');
+
+        {
+          let exec = reg.exec(content);
+          while (exec) {
+            const props = {};
+            const kvs = exec[1].split(/\s+/);
+            for (const kv of kvs) {
+              const matches = kv.match(/(\w+)=['"]+(\S+)['"]+/);
+              if (matches) {
+                const key = matches[1].toLowerCase();
+                const val = matches[2];
+
+                props[`__${key}`] = val;
+              }
+            }
+            tags.push(props);
+            exec = reg.exec(content);
+          }
+        }
+        return tags;
+      },
+    },
     externals: {
       is(url) {
         return !/^\./.test(url);
