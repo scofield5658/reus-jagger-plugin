@@ -12,3 +12,5 @@
 [download-image]: https://img.shields.io/npm/dm/reus-jagger-plugin.svg?style=flat-square
 [download-url]: https://npmjs.org/package/reus-jagger-plugin
 [license-image]: https://img.shields.io/npm/l/reus-jagger-plugin.svg
+
+> plugin for building webapp with webpack
