@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const vueConfig = require('./vue.config');
 
 module.exports = function(config) {
   return {
@@ -14,9 +15,7 @@ module.exports = function(config) {
           test: /\.vue$/i,
           loader: 'vue-loader',
           exclude: /node_modules/i,
-          options: {
-            extractCSS: (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev')
-          }
+          options: vueConfig,
         },
         {
           test: /\.pcss$/i,
@@ -48,7 +47,6 @@ module.exports = function(config) {
           TARGET: '"client"'
         }
       }),
-      // new ExtractTextPlugin("styles.css"),
     ],
     devtool: 'inline-source-map'
   };
