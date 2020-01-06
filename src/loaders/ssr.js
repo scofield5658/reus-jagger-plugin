@@ -15,7 +15,7 @@ module.exports = function(workdir, config) {
   // pre-load ssr entry
   if (process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev') {
     for (const route in routes) {
-      const {ssr: {entry} = {}} = routes[route];
+      const { ssr: { entry } = {}} = routes[route];
       if (entry) {
         require(absdest(entry));
       }
@@ -35,7 +35,7 @@ module.exports = function(workdir, config) {
               filepath: abssrc(entry),
               //referer: srcUrl(url.parse(route).pathname),
               target: 'node',
-              extract: {ext: 'css'}});
+              extract: { ext: 'css' }});
             const tmppath = `${abstmp(entry)}.${radom()}.js`;
 
             writefile(tmppath, content);
