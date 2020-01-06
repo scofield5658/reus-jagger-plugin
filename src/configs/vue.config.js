@@ -14,7 +14,7 @@ const cssLoaders = (options) => {
       return loader + (options.sourceMap ? extraParamChar + 'sourceMap' : '')
     }).join('!')
 
-    return ['vue-style-loader', sourceLoader].join('!')
+    return ['style-loader', sourceLoader].join('!')
   }
 
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html

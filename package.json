@@ -1,6 +1,6 @@
 {
   "name": "reus-jagger-plugin",
-  "version": "0.6.20",
+  "version": "0.6.21",
   "license": "MIT",
   "author": "guozhi <guozhi5658@gmail.com>",
   "description": "plugin for building webapp with webpack",
@@ -42,7 +42,6 @@
     "url-loader": "^1.1.2",
     "vue": "^2.6.10",
     "vue-loader": "^13.6.1",
-    "vue-style-loader": "^4.1.2",
     "vue-server-renderer": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^3.12.0"
