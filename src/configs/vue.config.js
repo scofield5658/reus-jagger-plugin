@@ -1,3 +1,4 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const isProduction = process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev'
 
 const cssLoaders = (options) => {
