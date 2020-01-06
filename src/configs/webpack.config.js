@@ -39,6 +39,7 @@ module.exports = function(config) {
       ]
     },
     plugins: [
+      new ExtractTextPlugin("styles.css"),
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
