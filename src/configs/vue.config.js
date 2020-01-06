@@ -1,6 +1,3 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const isProduction = process.env.REUS_PROJECT_ENV && process.env.REUS_PROJECT_ENV !== 'dev'
-
 const cssLoaders = (options) => {
   options = options || {}
   // generate loader string to be used with extract text plugin
@@ -17,14 +14,7 @@ const cssLoaders = (options) => {
       return loader + (options.sourceMap ? extraParamChar + 'sourceMap' : '')
     }).join('!')
 
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: sourceLoader,
-        fallback: 'vue-style-loader'
-      })
-    } else {
-      return ['vue-style-loader', sourceLoader].join('!')
-    }
+    return ['style-loader', sourceLoader].join('!')
   }
 
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
@@ -42,7 +32,6 @@ const cssLoaders = (options) => {
 module.exports = {
   loaders: cssLoaders({
     sourceMap: true,
-    extract: isProduction
   }),
   postcss: [
     require('postcss-import')(),

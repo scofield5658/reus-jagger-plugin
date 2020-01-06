@@ -26,7 +26,7 @@ module.exports = function(config) {
                 options : {
                   plugins: [
                     require('precss'),
-                    require('autoprefixer'),
+                    require('postcss-cssnext')(),
                   ]
                 }
             },
@@ -39,9 +39,11 @@ module.exports = function(config) {
       ]
     },
     plugins: [
+      // new ExtractTextPlugin("styles.css"),
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
+          REUS_PROJECT_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
           BASE_URL: `"${config.baseUrl}"`,
           CDN_URL: `"${config.cdnUrl}"`,
           TARGET: '"client"'
