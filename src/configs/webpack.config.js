@@ -43,6 +43,7 @@ module.exports = function(config) {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
+          REUS_PROJECT_ENV: `"${process.env.REUS_PROJECT_ENV}"`,
           BASE_URL: `"${config.baseUrl}"`,
           CDN_URL: `"${config.cdnUrl}"`,
           TARGET: '"client"'

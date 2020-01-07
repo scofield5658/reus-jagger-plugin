@@ -1,6 +1,6 @@
 {
   "name": "reus-jagger-plugin",
-  "version": "0.6.21",
+  "version": "0.6.22",
   "license": "MIT",
   "author": "guozhi <guozhi5658@gmail.com>",
   "description": "plugin for building webapp with webpack",
