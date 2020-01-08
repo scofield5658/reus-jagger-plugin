@@ -78,7 +78,7 @@ module.exports = function(workdir, config, mixins) {
           // this is ssr entry
             if (ssrConfig && ssrConfig.entry === pathname) {
             // compile ssr script file
-              const {content, extract} = await loader.compile({
+              const {content, filepath} = await loader.compile({
                 pathname,
                 target: 'node',
                 extract: {
@@ -88,7 +88,7 @@ module.exports = function(workdir, config, mixins) {
               });
               writefile(absdest(pathname), content);
 
-              extractfiles.push(extract);
+              extractfiles.push(filepath);
 
               return loader.compile({
                 pathname,
@@ -134,7 +134,7 @@ module.exports = function(workdir, config, mixins) {
         //{task, chunk, entryfiles}
         const tmppath = `./.tmp${path.dirname(html)}/__${chunk}.${ext}`;
 
-        await task(entryfiles.map(entryfile => entryfile.entry), tmppath);
+        await task(entryfiles.map(entryfile => entryfile.entry).filter(Boolean), tmppath);
 
         const buffer = fs.readFileSync(tmppath);
         const hash = calcMD5(buffer);
